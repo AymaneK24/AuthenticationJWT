@@ -1,6 +1,7 @@
-package emi.ac.ma.authentification.AuthenticationDoctor.doctor;
+package emi.ac.ma.authentification.actorRepositories;
 
 
+import emi.ac.ma.authentification.Actors.Doctor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

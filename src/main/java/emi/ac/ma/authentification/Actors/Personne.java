@@ -1,4 +1,4 @@
-package emi.ac.ma.authentification.AuthenticationPatient.patient;
+package emi.ac.ma.authentification.Actors;
 
 
 import jakarta.persistence.*;
@@ -7,50 +7,45 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.Date;
+import java.util.Collections;
 import java.util.List;
 
 @Entity
-@Table(name = "PATIENT")
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Patient implements UserDetails {
+
+public class Personne implements UserDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private int id;
 
     private String firstName;
     private String lastName;
-    private String gender;
-    private Date dateOfBirth;
     private String email;
-
     private String password;
+    private String role;
 
-
-    public Patient() {
-    }
-
-    public Patient(Integer id, String firstName, String lastName, String gender, Date dateOfBirth, String email, String password) {
+    public Personne(int id, String firstName, String lastName, String email, String password, String role) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.gender = gender;
-        this.dateOfBirth = dateOfBirth;
         this.email = email;
         this.password = password;
-
+        this.role = role;
     }
 
-    public static PatientBuilder builder() {
-        return new PatientBuilder();
+    public Personne() {
+    }
+
+    public static PersonneBuilder builder() {
+        return new PersonneBuilder();
     }
 
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("PATIENT"));
+        return List.of(new SimpleGrantedAuthority(getRole()));
     }
-
 
     @Override
     public String getUsername() {
@@ -82,7 +77,7 @@ public class Patient implements UserDetails {
         return true;
     }
 
-    public Integer getId() {
+    public int getId() {
         return this.id;
     }
 
@@ -98,8 +93,11 @@ public class Patient implements UserDetails {
         return this.email;
     }
 
+    public String getRole() {
+        return this.role;
+    }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -119,79 +117,55 @@ public class Patient implements UserDetails {
         this.password = password;
     }
 
-
-
-    public String getGender() {
-        return this.gender;
-    }
-
-    public Date getDateOfBirth() {
-        return this.dateOfBirth;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public void setDateOfBirth(Date dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
+    public void setRole(String role) {
+        this.role = role;
     }
 
 
-    public static class PatientBuilder {
-        private Integer id;
+    public static class PersonneBuilder {
+        private int id;
         private String firstName;
         private String lastName;
-        private String gender;
-        private Date dateOfBirth;
         private String email;
         private String password;
+        private String role;
 
-
-        public PatientBuilder() {
+        public PersonneBuilder() {
         }
 
-        public PatientBuilder id(Integer id) {
+        public PersonneBuilder id(int id) {
             this.id = id;
             return this;
         }
 
-        public PatientBuilder firstName(String firstName) {
+        public PersonneBuilder firstName(String firstName) {
             this.firstName = firstName;
             return this;
         }
 
-        public PatientBuilder lastName(String lastName) {
+        public PersonneBuilder lastName(String lastName) {
             this.lastName = lastName;
             return this;
         }
 
-        public PatientBuilder gender(String gender) {
-            this.gender = gender;
-            return this;
-        }
-
-        public PatientBuilder dateOfBirth(Date dateOfBirth) {
-            this.dateOfBirth = dateOfBirth;
-            return this;
-        }
-
-        public PatientBuilder email(String email) {
+        public PersonneBuilder email(String email) {
             this.email = email;
             return this;
         }
 
-        public PatientBuilder password(String password) {
+        public PersonneBuilder password(String password) {
             this.password = password;
             return this;
         }
 
-
-
-        public Patient build() {
-            return new Patient(this.id, this.firstName, this.lastName, this.gender, this.dateOfBirth, this.email, this.password);
+        public PersonneBuilder role(String role) {
+            this.role = role;
+            return this;
         }
 
+        public Personne build() {
+            return new Personne(this.id, this.firstName, this.lastName, this.email, this.password, this.role);
+        }
 
     }
 }

@@ -1,6 +1,10 @@
-package emi.ac.ma.authentification.AuthenticationPatient.AuthenticationPatientController;
+package emi.ac.ma.authentification.AuthControllers;
 
 
+import emi.ac.ma.authentification.AuthenticationResponseAndRequest.AuthenticationPersonneRequest;
+import emi.ac.ma.authentification.AuthenticationResponseAndRequest.AuthenticationPersonneResponse;
+import emi.ac.ma.authentification.AuthServices.AuthenticationPatientService;
+import emi.ac.ma.authentification.RegisterRequests.RegisterPatientRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,14 +20,14 @@ public class AuthenticationPatientController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationPatientResponse> register(
+    public ResponseEntity<AuthenticationPersonneResponse> register(
             @RequestBody RegisterPatientRequest request) {
         return ResponseEntity.ok(authenticationService.register(request));
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationPatientResponse> authenticate(
-            @RequestBody AuthenticationPatientRequest request) {
+    public ResponseEntity<AuthenticationPersonneResponse> authenticate(
+            @RequestBody AuthenticationPersonneRequest request) {
         return ResponseEntity.ok(authenticationService.authenticate(request));
     }
 

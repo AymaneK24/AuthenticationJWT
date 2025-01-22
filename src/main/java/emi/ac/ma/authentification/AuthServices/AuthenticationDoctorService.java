@@ -1,12 +1,15 @@
-package emi.ac.ma.authentification.AuthenticationDoctor.AuthenticationDoctorController;
+package emi.ac.ma.authentification.AuthServices;
 
 
-import emi.ac.ma.authentification.AuthenticationDoctor.doctor.Doctor;
-import emi.ac.ma.authentification.AuthenticationDoctor.doctor.DoctorRepository;
+import emi.ac.ma.authentification.Actors.Doctor;
+import emi.ac.ma.authentification.Actors.Personne;
+import emi.ac.ma.authentification.RegisterRequests.RegisterDoctorRequest;
+import emi.ac.ma.authentification.AuthenticationResponseAndRequest.AuthenticationPersonneRequest;
+import emi.ac.ma.authentification.AuthenticationResponseAndRequest.AuthenticationPersonneResponse;
+import emi.ac.ma.authentification.actorRepositories.DoctorRepository;
 import emi.ac.ma.authentification.config.JwtService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -26,35 +29,38 @@ public class AuthenticationDoctorService {
     }
 
 
-    public AuthenticationDoctorResponse register(RegisterDoctorRequest request) {
+    public AuthenticationPersonneResponse register(RegisterDoctorRequest request) {
         if (doctorRepository.existsByEmail(request.getEmail())) {
 
             throw new IllegalArgumentException("Email is already registered");
         }
 
-        Doctor doctor = new Doctor.DoctorBuilder()
-                .firstName(request.getFirstname())
-                .lastName(request.getLastname())
-                .email(request.getEmail())
-                .telephone(request.getTelephone())
-                .specialty(request.getSpecialty())
-                .description(request.getDescription())
-                .langue(request.getLangue())
-                .inpe(request.getInpe())
-                .prixConsultation(request.getPrixConsultation())
-                .genreConsultation(request.getGenreConsultation())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .build();
+        Doctor doctor = new Doctor();
+        doctor.setFirstName(request.getFirstname());
+        doctor.setLastName(request.getLastname());
+        doctor.setEmail(request.getEmail());
+        doctor.setTelephone(request.getTelephone());
+        doctor.setSpecialty(request.getSpecialty());
+        doctor.setDescription(request.getDescription());
+        doctor.setLangue(request.getLangue());
+        doctor.setInpe(request.getInpe());
+        doctor.setPrixConsultation(request.getPrixConsultation());
+        doctor.setGenreConsultation(request.getGenreConsultation());
+        doctor.setPassword(passwordEncoder.encode(request.getPassword()));
+        doctor.setRole(request.getRole());
+
+
+
 
         doctorRepository.save(doctor);
         var jwtToken = jwtService.generateToken(doctor);
-        return AuthenticationDoctorResponse.builder().token(jwtToken).build();
+        return AuthenticationPersonneResponse.builder().token(jwtToken).build();
 
     }
 
 
 
-    public AuthenticationDoctorResponse authenticate(AuthenticationDoctorRequest request) {
+    public AuthenticationPersonneResponse authenticate(AuthenticationPersonneRequest request) {
 
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -64,7 +70,7 @@ public class AuthenticationDoctorService {
         );
         var user = doctorRepository.findByEmail(request.getEmail()).orElseThrow();
         var jwtToken = jwtService.generateToken(user);
-        return AuthenticationDoctorResponse.builder().token(jwtToken).build();
+        return AuthenticationPersonneResponse.builder().token(jwtToken).build();
     }
 
 }

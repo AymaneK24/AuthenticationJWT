@@ -1,4 +1,4 @@
-package emi.ac.ma.authentification.AuthenticationDoctor.AuthenticationDoctorController;
+package emi.ac.ma.authentification.RegisterRequests;
 
 
 public class RegisterDoctorRequest {
@@ -13,6 +13,7 @@ public class RegisterDoctorRequest {
     private String langue;
     private String genreConsultation;
     private String prixConsultation;
+    private String role;
 
     public RegisterDoctorRequest(String firstname, String lastname, String email, String password, Long inpe, String description, String specialty, String telephone, String langue, String genreConsultation, String prixConsultation) {
         this.firstname = firstname;
@@ -26,9 +27,11 @@ public class RegisterDoctorRequest {
         this.langue = langue;
         this.genreConsultation = genreConsultation;
         this.prixConsultation = prixConsultation;
+        setRole("DOCTOR");
     }
 
     public RegisterDoctorRequest() {
+        setRole("DOCTOR");
     }
 
 
@@ -67,6 +70,13 @@ public class RegisterDoctorRequest {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+    public String getRole() {
+        return this.role;
     }
 
 

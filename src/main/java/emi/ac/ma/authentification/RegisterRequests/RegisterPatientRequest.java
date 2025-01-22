@@ -1,4 +1,4 @@
-package emi.ac.ma.authentification.AuthenticationPatient.AuthenticationPatientController;
+package emi.ac.ma.authentification.RegisterRequests;
 
 import java.util.Date;
 
@@ -10,9 +10,11 @@ public class RegisterPatientRequest {
     private String password;
     private String gender;
     private Date dateOfBirth;
+    private String role;
 
 
     public RegisterPatientRequest() {
+        setRole("PATIENT");
     }
 
     public RegisterPatientRequest(String firstName, String lastName, String email, String password, String gender, Date dateOfBirth) {
@@ -22,6 +24,7 @@ public class RegisterPatientRequest {
         this.password = password;
         this.gender = gender;
         this.dateOfBirth = dateOfBirth;
+        setRole("PATIENT");
     }
 
     public static RegisterPatientRequestBuilder builder() {
@@ -73,6 +76,13 @@ public class RegisterPatientRequest {
         this.gender = gender;
     }
 
+    public String getRole() {
+        return this.role;
+    }
+    public void setRole(String role) {
+        this.role = role;
+    }
+
     public void setDateOfBirth(Date dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
@@ -85,6 +95,7 @@ public class RegisterPatientRequest {
         private String password;
         private String gender;
         private Date dateOfBirth;
+        private String role;
 
         RegisterPatientRequestBuilder() {
         }

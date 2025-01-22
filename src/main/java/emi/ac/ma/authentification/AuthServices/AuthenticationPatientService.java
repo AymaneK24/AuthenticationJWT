@@ -1,12 +1,15 @@
-package emi.ac.ma.authentification.AuthenticationPatient.AuthenticationPatientController;
+package emi.ac.ma.authentification.AuthServices;
 
 
 
+import emi.ac.ma.authentification.AuthenticationResponseAndRequest.AuthenticationPersonneRequest;
+import emi.ac.ma.authentification.AuthenticationResponseAndRequest.AuthenticationPersonneResponse;
+import emi.ac.ma.authentification.RegisterRequests.RegisterPatientRequest;
 import emi.ac.ma.authentification.config.JwtService;
 
-import emi.ac.ma.authentification.AuthenticationPatient.patient.Patient;
+import emi.ac.ma.authentification.Actors.Patient;
 
-import emi.ac.ma.authentification.AuthenticationPatient.patient.PatientRepository;
+import emi.ac.ma.authentification.actorRepositories.PatientRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,30 +31,31 @@ public class AuthenticationPatientService {
     }
 
 
-    public AuthenticationPatientResponse register(RegisterPatientRequest request) {
+    public AuthenticationPersonneResponse register(RegisterPatientRequest request) {
         if (patientRepository.existsByEmail(request.getEmail())) {
 
             throw new IllegalArgumentException("Email is already registered");
         }
 
-        Patient patient = new Patient.PatientBuilder()
-                .firstName(request.getFirstName())
-                .lastName(request.getLastName())
-                .email(request.getEmail())
-                .dateOfBirth(request.getDateOfBirth())
-                .gender(request.getGender())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .build();
+        Patient patient = new Patient();
+        patient.setEmail(request.getEmail());
+        patient.setPassword(passwordEncoder.encode(request.getPassword()));
+        patient.setFirstName(request.getFirstName());
+        patient.setLastName(request.getLastName());
+        patient.setGender(request.getGender());
+        patient.setDateOfBirth(request.getDateOfBirth());
+        patient.setRole(request.getRole());
+
 
         patientRepository.save(patient);
         var jwtToken = jwtService.generateToken(patient);
-        return AuthenticationPatientResponse.builder().token(jwtToken).build();
+        return AuthenticationPersonneResponse.builder().token(jwtToken).build();
 
     }
 
 
 
-    public AuthenticationPatientResponse authenticate(AuthenticationPatientRequest request) {
+    public AuthenticationPersonneResponse authenticate(AuthenticationPersonneRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
@@ -60,7 +64,7 @@ public class AuthenticationPatientService {
         );
         var user = patientRepository.findByEmail(request.getEmail()).orElseThrow();
         var jwtToken = jwtService.generateToken(user);
-        return AuthenticationPatientResponse.builder().token(jwtToken).build();
+        return AuthenticationPersonneResponse.builder().token(jwtToken).build();
     }
 
 }

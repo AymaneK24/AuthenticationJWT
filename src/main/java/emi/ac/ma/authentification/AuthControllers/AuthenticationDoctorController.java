@@ -1,5 +1,9 @@
-package emi.ac.ma.authentification.AuthenticationDoctor.AuthenticationDoctorController;
+package emi.ac.ma.authentification.AuthControllers;
 
+import emi.ac.ma.authentification.AuthServices.AuthenticationDoctorService;
+import emi.ac.ma.authentification.AuthenticationResponseAndRequest.AuthenticationPersonneRequest;
+import emi.ac.ma.authentification.RegisterRequests.RegisterDoctorRequest;
+import emi.ac.ma.authentification.AuthenticationResponseAndRequest.AuthenticationPersonneResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,14 +22,14 @@ public class AuthenticationDoctorController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationDoctorResponse> register(
+    public ResponseEntity<AuthenticationPersonneResponse> register(
             @RequestBody RegisterDoctorRequest request) {
         return ResponseEntity.ok(authenticationDoctorService.register(request));
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationDoctorResponse> authenticate(
-            @RequestBody AuthenticationDoctorRequest request) {
+    public ResponseEntity<AuthenticationPersonneResponse> authenticate(
+            @RequestBody AuthenticationPersonneRequest request) {
         return ResponseEntity.ok(authenticationDoctorService.authenticate(request));
     }
 
